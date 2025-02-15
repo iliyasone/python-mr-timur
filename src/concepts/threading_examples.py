@@ -1,34 +1,26 @@
-import threading
-from time import sleep
+from threading import Thread
+from time import sleep, time
 
-THREAD_NAME = 'THIS IS THREAD NUMBER -- # %s # --'
 
-def countdown():
-    name = threading.current_thread().name
-    for i in range(10, 0, -1):
-        print(name, i)
+def loading_status_bar(workload_thread: Thread):
+    current_text = ''
+    while workload_thread.is_alive():
+        current_text += '■'
+        print(current_text)
+        if len(current_text) > 4:
+            current_text = ''
         sleep(1)
-    print(name, 'BOOM!')
-
-# Чтобы просто запустить можно сделать это одной строчкой
-threading.Thread(target=countdown).start()
 
 
+def workload_function():
+    sleep(11.5)
+    print('MAIN THREAD DONE')
 
-threads: list[threading.Thread] = []
+def start_workload():
+    working_thread = Thread(target=workload_function)
+    status_thread = Thread(target=loading_status_bar, args=(working_thread,))
 
+    working_thread.start()
+    status_thread.start()
 
-for i in range(5):
-    threads.append(threading.Thread(target=countdown, name=THREAD_NAME % i, daemon=True))
-    threads[i].start()
-
-    
-
-
-for thread in threads:
-    print(thread.name, 'joined')
-    thread.join()
-    print(thread.name, 'finished')
-
-
-print('Main Thread Finished')
+start_workload()
