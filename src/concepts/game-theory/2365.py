@@ -41,45 +41,45 @@ def moves(s: int):
 
 
 S_MAX = 15+1
-is_position_winning = [None] * S_MAX
-is_position_winning[0] = False
-in_turns = [''] * S_MAX
+is_position_winning = ['None'] * S_MAX
+is_position_winning[0] = 'False'
 
 
 # 1. Находим выигрышные позиции
 for s in range(1, S_MAX):                        # смотрим все возможные позиции
-    if is_position_winning[s] is None:           # которые не заняты
+    if 'None' in is_position_winning[s]:         # которые не заняты
 
         #  any(is_position_winning[move] is False for move in moves[s])
         if any(move == 0 for move in moves(s)):
             # есть хотя бы один ход который приводит к поражению противника
-            is_position_winning[s] = True
-            in_turns[s] = 1
+            is_position_winning[s] = 'True1'
 
 # 2. Находим проигрышные позиции
 for s in range(1, S_MAX):
-    if is_position_winning[s] is None:  
-        if all(is_position_winning[move] is True for move in moves(s)):
-            is_position_winning[s] = False
-            in_turns[s] = 2
+    if 'None' in is_position_winning[s]:  
+        if all('True' in is_position_winning[move] for move in moves(s)):
+            is_position_winning[s] = 'False2'
 
-# 3. Находим выигрышные позиции (again)
-for s in range(1, S_MAX):                         
-    if is_position_winning[s] is None:           
-        if any(is_position_winning[move] is False for move in moves(s)):
-            is_position_winning[s] = True
-            in_turns[s] = 3
+
+for s in range(1, S_MAX):
+    if 'None' in is_position_winning[s]:  
+        if any('False' in is_position_winning[move] for move in moves(s)):
+            is_position_winning[s] = 'True3'
+
+
+# 2. Находим проигрышные позиции
+for s in range(1, S_MAX):
+    if 'None' in is_position_winning[s]:  
+        if all('True' in is_position_winning[move] for move in moves(s)):
+            is_position_winning[s] = 'False4'
+
+for s in range(1, S_MAX):
+    if 'None' in is_position_winning[s]:  
+        if any('False' in is_position_winning[move] for move in moves(s)):
+            is_position_winning[s] = 'True5'
 
 
 # запись в файл
 with open('table.txt', 'w') as file:
-    for s in range(0, S_MAX):
-        file.write(f'{s}\t{is_position_winning[s]}\t{in_turns[s]}\n')
-
-
-"""
-# 3. Находим проигрышные позиции при неудаче
-for s in range(1, S_MAX):
-    if any(is_position_winning[move] is True for move in moves(s)):
-        print(s, 'MAYBE FALSE')
-"""
+    for s in range(1, S_MAX):
+        file.write(f'{s}\t{is_position_winning[s]}\n')
