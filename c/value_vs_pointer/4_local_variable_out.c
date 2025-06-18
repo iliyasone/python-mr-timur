@@ -1,19 +1,22 @@
 #include <stdio.h>
 
-int* generate_array(int **out) {
+int* bad_generate_array() {
     int array[5] = {0, 0, 0, 0, 0};
-
-    *out = array;
 
     printf("inner %d\n", array);
     return array;
 }
 
-int main() {
-    int* loophole;
-    int* array = generate_array(&loophole);
+int* good_generate_array() {
+    int* inner_array = malloc(sizeof(int) * 5);
+    printf("inner %d\n", inner_array);
+    return inner_array;
+}
 
-    printf("loophole: %d\n", loophole);
+
+int main() {
+    int* array = generate_array();
+
     printf("outer %d\n", array);
     return 0;
 }
