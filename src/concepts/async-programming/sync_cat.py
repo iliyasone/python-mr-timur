@@ -1,7 +1,12 @@
 import requests
 
-# API_KEY=""
-from typing import TypedDict
+from config import API_KEY
+import os
+
+
+from typing import Any, TypedDict
+
+
 
 
 class CatPicture(TypedDict, total=True):
@@ -12,15 +17,17 @@ class CatPicture(TypedDict, total=True):
     height: int
 
 
-json_url = "https://api.thecatapi.com/v1/images/search?limit=10"
+
+
+json_url = "https://api.thecatapi.com/v1/images/search?limit=100&api_key="
 url = "https://cdn2.thecatapi.com/images/"
 
 
 def get_cats_json() -> list[CatPicture]:
-    response = requests.get(json_url)
+    response: requests.Response = requests.get(json_url)
     response.raise_for_status()
-    with open("response.json", mode="w") as f:
-        f.write(response.text)
+    with open("response.json", mode="wb") as f:
+        f.write(response.content)
     return response.json()
 
 
@@ -38,3 +45,11 @@ def get_picture(url: str):
 
 
 # eval('''exec("""import os;print(os.getenv("HELLO", "gs"))""")''')
+
+
+# FROM requests
+class Response:
+    content: bytes
+
+    def json(self) -> Any:
+        ...
